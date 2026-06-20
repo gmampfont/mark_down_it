@@ -1,151 +1,138 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MarkItDown Converter</title>
-  <style>
-    :root { --bg:#0f172a; --card:#1e293b; --accent:#6366f1; --text:#e2e8f0; --muted:#94a3b8; --border:#334155; }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; min-height: 100vh; font-family: system-ui, -apple-system, Segoe UI, sans-serif;
-      background: var(--bg); color: var(--text); display: flex; justify-content: center; padding: 40px 16px;
-    }
-    .wrap { width: 100%; max-width: 760px; }
-    h1 { font-size: 1.6rem; margin: 0 0 4px; }
-    p.sub { color: var(--muted); margin: 0 0 24px; }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
-    #drop {
-      border: 2px dashed var(--border); border-radius: 12px; padding: 40px 20px; text-align: center;
-      cursor: pointer; transition: border-color .15s, background .15s;
-    }
-    #drop.drag { border-color: var(--accent); background: rgba(99,102,241,.08); }
-    #drop strong { color: var(--accent); }
-    #fname { margin-top: 14px; color: var(--muted); font-size: .9rem; word-break: break-all; }
-    .row { display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
-    button {
-      flex: 1; min-width: 160px; padding: 12px 16px; border: none; border-radius: 10px; font-size: 1rem;
-      font-weight: 600; cursor: pointer; transition: opacity .15s;
-    }
-    button:disabled { opacity: .45; cursor: not-allowed; }
-    .primary { background: var(--accent); color: white; }
-    .ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
-    #status { margin-top: 16px; min-height: 22px; font-size: .92rem; color: var(--muted); }
-    #status.err { color: #f87171; }
-    pre {
-      margin-top: 18px; background: #0b1220; border: 1px solid var(--border); border-radius: 10px;
-      padding: 16px; max-height: 360px; overflow: auto; white-space: pre-wrap; word-break: break-word;
-      font-size: .85rem; display: none;
-    }
-    input[type=file] { display: none; }
-    .spin { display:inline-block; width:14px; height:14px; border:2px solid var(--muted); border-top-color:var(--accent);
-      border-radius:50%; animation:spin .7s linear infinite; vertical-align:-2px; margin-right:6px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-  </style>
+  <title>Fomatec MD converter</title>
+  <link rel="icon" href="{{ url_for('static', filename='logo.jpeg') }}" type="image/jpeg" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-  <div class="wrap">
-    <h1>MarkItDown Converter</h1>
-    <p class="sub">Upload a PDF, Word, PowerPoint, Excel, HTML, image, audio file and more — get clean Markdown back.</p>
 
-    <div class="card">
-      <div id="drop">
-        <div>Drag &amp; drop a file here, or <strong>click to browse</strong></div>
-        <div id="fname"></div>
-      </div>
-      <input type="file" id="file" />
-
-      <div class="row">
-        <button class="ghost" id="preview" disabled>Preview Markdown</button>
-        <button class="primary" id="download" disabled>Convert &amp; Download .md</button>
-      </div>
-
-      <div id="status"></div>
-      <pre id="out"></pre>
-    </div>
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/">
+      <img class="brand-logo" src="{{ url_for('static', filename='logo.jpeg') }}" alt="Fomatec" />
+    </a>
+    <nav class="main-nav" id="mainNav">
+      <a href="https://fomatecsolutions.com/">Fomatec Solutions</a>
+    </nav>
   </div>
+</header>
 
-  <script>
-    const drop = document.getElementById('drop');
-    const fileInput = document.getElementById('file');
-    const fname = document.getElementById('fname');
-    const previewBtn = document.getElementById('preview');
-    const downloadBtn = document.getElementById('download');
-    const status = document.getElementById('status');
-    const out = document.getElementById('out');
-    let selected = null;
+<main>
+  <section class="section cream">
+    <div class="container converter">
+      <h1>MD Converter</h1>
+      <p class="sub">Upload a PDF, Word, PowerPoint, Excel, HTML, image, audio file and more — get clean Markdown back.</p>
 
-    function setFile(f) {
-      selected = f;
-      fname.textContent = f ? `Selected: ${f.name}` : '';
-      previewBtn.disabled = downloadBtn.disabled = !f;
-      out.style.display = 'none';
-      status.textContent = '';
-      status.className = '';
+      <div class="card">
+        <div id="drop">
+          <div>Drag &amp; drop a file here, or <strong>click to browse</strong></div>
+          <div id="fname"></div>
+        </div>
+        <input type="file" id="file" />
+
+        <div class="row">
+          <button class="btn btn-light" id="preview" disabled>Preview Markdown</button>
+          <button class="btn btn-dark" id="download" disabled>Convert &amp; Download .md</button>
+        </div>
+
+        <div id="status"></div>
+        <pre id="out"></pre>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <small>&copy; 2026 FOMATEC</small>
+  </div>
+</footer>
+
+<script>
+  const drop = document.getElementById('drop');
+  const fileInput = document.getElementById('file');
+  const fname = document.getElementById('fname');
+  const previewBtn = document.getElementById('preview');
+  const downloadBtn = document.getElementById('download');
+  const status = document.getElementById('status');
+  const out = document.getElementById('out');
+  let selected = null;
+
+  function setFile(f) {
+    selected = f;
+    fname.textContent = f ? `Selected: ${f.name}` : '';
+    previewBtn.disabled = downloadBtn.disabled = !f;
+    out.style.display = 'none';
+    status.textContent = '';
+    status.className = '';
+  }
+
+  drop.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', e => { if (e.target.files[0]) setFile(e.target.files[0]); });
+
+  ['dragenter', 'dragover'].forEach(ev =>
+    drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('drag'); }));
+  ['dragleave', 'drop'].forEach(ev =>
+    drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('drag'); }));
+  drop.addEventListener('drop', e => { if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]); });
+
+  function busy(on, msg) {
+    previewBtn.disabled = downloadBtn.disabled = on;
+    status.className = '';
+    status.innerHTML = on ? `<span class="spin"></span>${msg || 'Converting…'}` : '';
+  }
+  function fail(msg) {
+    status.className = 'err';
+    status.textContent = msg;
+  }
+
+  previewBtn.addEventListener('click', async () => {
+    if (!selected) return;
+    busy(true);
+    try {
+      const fd = new FormData();
+      fd.append('file', selected);
+      const res = await fetch('/convert', { method: 'POST', body: fd });
+      const data = await res.json();
+      busy(false);
+      if (!res.ok) return fail(data.error || 'Conversion failed.');
+      out.textContent = data.markdown || '(empty result)';
+      out.style.display = 'block';
+      status.textContent = 'Done. Showing preview above.';
+    } catch (err) {
+      busy(false); fail('Request failed: ' + err.message);
     }
+  });
 
-    drop.addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', e => { if (e.target.files[0]) setFile(e.target.files[0]); });
-
-    ['dragenter', 'dragover'].forEach(ev =>
-      drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('drag'); }));
-    ['dragleave', 'drop'].forEach(ev =>
-      drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('drag'); }));
-    drop.addEventListener('drop', e => { if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]); });
-
-    function busy(on, msg) {
-      previewBtn.disabled = downloadBtn.disabled = on;
-      status.className = '';
-      status.innerHTML = on ? `<span class="spin"></span>${msg || 'Converting…'}` : '';
-    }
-    function fail(msg) {
-      status.className = 'err';
-      status.textContent = msg;
-    }
-
-    previewBtn.addEventListener('click', async () => {
-      if (!selected) return;
-      busy(true);
-      try {
-        const fd = new FormData();
-        fd.append('file', selected);
-        const res = await fetch('/convert', { method: 'POST', body: fd });
-        const data = await res.json();
-        busy(false);
-        if (!res.ok) return fail(data.error || 'Conversion failed.');
-        out.textContent = data.markdown || '(empty result)';
-        out.style.display = 'block';
-        status.textContent = 'Done. Showing preview above.';
-      } catch (err) {
-        busy(false); fail('Request failed: ' + err.message);
+  downloadBtn.addEventListener('click', async () => {
+    if (!selected) return;
+    busy(true, 'Converting & preparing download…');
+    try {
+      const fd = new FormData();
+      fd.append('file', selected);
+      fd.append('download', '1');
+      const res = await fetch('/convert', { method: 'POST', body: fd });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        busy(false); return fail(data.error || 'Conversion failed.');
       }
-    });
-
-    downloadBtn.addEventListener('click', async () => {
-      if (!selected) return;
-      busy(true, 'Converting & preparing download…');
-      try {
-        const fd = new FormData();
-        fd.append('file', selected);
-        fd.append('download', '1');
-        const res = await fetch('/convert', { method: 'POST', body: fd });
-        if (!res.ok) {
-          const data = await res.json().catch(() => ({}));
-          busy(false); return fail(data.error || 'Conversion failed.');
-        }
-        const blob = await res.blob();
-        const name = (res.headers.get('Content-Disposition') || '').match(/filename="?([^"]+)"?/);
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = name ? name[1] : 'converted.md';
-        document.body.appendChild(a); a.click(); a.remove();
-        URL.revokeObjectURL(a.href);
-        busy(false);
-        status.textContent = 'Downloaded ' + a.download;
-      } catch (err) {
-        busy(false); fail('Request failed: ' + err.message);
-      }
-    });
-  </script>
+      const blob = await res.blob();
+      const name = (res.headers.get('Content-Disposition') || '').match(/filename="?([^"]+)"?/);
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = name ? name[1] : 'converted.md';
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(a.href);
+      busy(false);
+      status.textContent = 'Downloaded ' + a.download;
+    } catch (err) {
+      busy(false); fail('Request failed: ' + err.message);
+    }
+  });
+</script>
 </body>
 </html>
