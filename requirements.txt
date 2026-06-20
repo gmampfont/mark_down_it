@@ -1,0 +1,2 @@
+flask>=3.0
+markitdown[pdf,docx,pptx,xlsx,xls,outlook,audio-transcription,youtube-transcription]>=0.1.6
